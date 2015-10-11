@@ -36,7 +36,7 @@ This will move the inst instanceo of box, x value from 0 to 20 in 1 second.
 
 You can have as many vars as you want but they must be int.
 
-Planned features:
+##Planned features:
   stop a tween.
   
   shortcut for creating single var tweens.
