@@ -23,7 +23,6 @@ class single:
      def update(self,dt):
          self.progress = self.progress + self.rate * dt
          p = self.progress
-         print(p)
          x = x = p >= 1 and 1 or ease[self.mode](p)
          self.current = self.start + self.diff*x
          if p > 1:
