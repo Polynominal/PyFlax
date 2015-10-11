@@ -66,7 +66,7 @@ class Tween():
     def to(self,time,obj,var,mode="Linear"):
        t = _to(time,obj,var,mode="Linear")
        list.insert(self.tweens,len(self.tweens)+1,t)
-       return
+       return t
 
     def update(self,dt):
         for tween in self.tweens:
