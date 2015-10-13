@@ -32,13 +32,24 @@ tween = Timer.to(1,inst,{"x":20})
 #your update loop 
 timer.update(dt)
 ```
+#Advanced(Untested):
+You can use a lists as your var/item see:
+```python
+inst.color = [0,0,0]
+tween = Timer.to(1,inst,{"color":[255,255,255]})
+```
+schedule another tween:
+```python
+inst.color =[0,0,0]
+inst.x = 0 
+inst.y = 0 
+tween = Timer.to(1,inst,{"x":100,"y":100).after(1,{"color":[255,255,255]})
+```
 This will move the inst instanceo of box, x value from 0 to 20 in 1 second. 
 
 You can have as many vars as you want but they must be int.
 
 ##Planned features:
-  stop a tween.
-  
+  stop a tween sequence.
   shortcut for creating single var tweens.
-  
-  Tween dict,list,tuple.
+
