@@ -1,7 +1,38 @@
+import math
 def linear(x):
     return x
+def quad(x):
+    return x*x
+def quadout(x):
+    return 1 -quad(x)
+def cubic(x):
+    return x*x*x
+def cubicout(x):
+    return 1 - cubic(x)
+def quint(x):
+    return x*x*x*x
+def quintout(x):
+    return 1-quint(x)
+def sine(x):
+    return -math.cos(p * (math.pi * .5)) + 1
+def sineout(x):
+    return 1-sine(x)
+def cosine(x):
+    return -math.sine(p*(math.pi *.5)) + 1
+def cosineout(x):
+    return 1-cosine(x)
 ease = {
     "linear":linear,
+    "quad":quad,
+    "quad-out":quadout,
+    "cubic":cubic,
+    "cubic-out":cubicout,
+    "quint":quint,
+    "quint-out":quintout,
+    "sine":sine,
+    "sine-out":sineout,
+    "cosine":cosine,
+    "cosine-out":cosineout,
 }
 def findDistance(x,y):
     if not x or not y:
@@ -18,6 +49,8 @@ class single:
          self.mode = mode
          self.exp = exp
          self.done = False
+         self.delay = 0 
+         self.initt = 0
      def get(self):
          return self.current
      def update(self,dt):
@@ -30,40 +63,55 @@ class single:
 
 
 class _to:
-    def __init__(self,time,obj,var,mode="Linear",done = None):
+    def __init__(self,time,obj,var,mode="Linear",done = None,parent):
         self.tweens = []
         self.var = var
         self.obj = obj
         self.done = False
         self.onComplete = done
+        self.initt = 0
+        self.parent = parent
         #key val
         for i,v in var.items():
             item = single(time,getattr(obj,i),v)
             list.insert(self.tweens,len(self.tweens)+1,item)
 
     def update(self,dt):
-        no = 0
-        items = []
-        for i,v in self.var.items():
-            self.tweens[no].update(dt)
-            setattr(self.obj,i,self.tweens[no].get())
-            if self.tweens[no].done:
-                items.insert(len(items)+1,i)
-            no = no +1
-        no = 0
-        for item in self.tweens:
-            if item.done:
-                self.tweens.remove(item)
-            no = no +1
-        for item in items:
-             self.var.pop(item, None)
-        if len(self.tweens) == 0:
-            self.done = True
-            if self.onComplete:
-                self.onComplete()
+        if self.initt > self.delay: 
+            no = 0
+            items = []
+            for i,v in self.var.items():
+                self.tweens[no].update(dt)
+                setattr(self.obj,i,self.tweens[no].get())
+                if self.tweens[no].done:
+                    items.insert(len(items)+1,i)
+                no = no +1
+            no = 0
+            for item in self.tweens:
+                if item.done:
+                    self.tweens.remove(item)
+                no = no +1
+            for item in items:
+                 self.var.pop(item, None)
+            if len(self.tweens) == 0:
+                self.done = True
+                if self._after:
+                    self = self._after(self)
+                else:
+                    if self.onComplete:
+                        self.onComplete()
+        else:
+            self.initt += dt
 
         pass
+    def after(time,var,mode="linear"):
+        self._after = _to(time,self.obj,var,mode,False,self.parent)
+        list.insert(self.parent.tweens,len(self.parent.tweens)+1,self._after)
+        return self._after
+    def delay(t):
+        self.delay = t 
     def stop(self):
+        list.remove(selfparent.tweens,self)
         pass
 class Tween():
     def __init__(self):
@@ -72,7 +120,7 @@ class Tween():
     # VAR HAS TO BE DICT WITH STR:EXPVAL
     def to(self,time,obj,var,mode="Linear",func=None):
        mode = mode or "linear"
-       t = _to(time,obj,var,mode,func)
+       t = _to(time,obj,var,mode,func,self)
        list.insert(self.tweens,len(self.tweens)+1,t)
        return
 
