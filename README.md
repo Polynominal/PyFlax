@@ -27,7 +27,7 @@ class box(x,y)
       self.y = y 
 inst = box(0,0)
 
-tween = Timer.to(1,inst,["x":20])
+tween = Timer.to(1,inst,{"x":20})
 
 #your update loop 
 timer.update(dt)
