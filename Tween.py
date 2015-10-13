@@ -61,7 +61,6 @@ class single:
          if p > 1:
              self.done = True
 
-
 class _to:
     def __init__(self,time,obj,var,mode="Linear",done = None,parent):
         self.tweens = []
@@ -73,8 +72,21 @@ class _to:
         self.parent = parent
         #key val
         for i,v in var.items():
-            item = single(time,getattr(obj,i),v)
-            list.insert(self.tweens,len(self.tweens)+1,item)
+            if type(v) == int:
+                item = single(time,getattr(obj,i),v)
+                list.insert(self.tweens,len(self.tweens)+1,item)    
+            elif type(v) == list:
+                t = getattr(obj,i)
+                if type(v) == list:
+                    items = v 
+                    no = 0
+                    for var in v:
+                        item = single(time,getattr(t[no]),var)
+                        list.insert(self.tweens,len(self.tweens)+1,item)
+                        no += 1
+            else:
+                print("The item: " + v +" for " + i + " is not a number or a list!")
+            
 
     def update(self,dt):
         if self.initt > self.delay: 
