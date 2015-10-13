@@ -13,8 +13,9 @@ The only thing you need is delta time.
 ##Easing
 Currently theres only "Linear" easing however you can easily add your own easing types in the Tween.py dictionary called "ease"
 ##Usage
-variables is a dictionary list reflecting your class and expected value 
-Timer.to(time,object,variables,easing)
+vars is a dictionary list reflecting your class and expected value 
+
+Timer.to(time,object,vars,easing)
 
 *default easing is "Linear"
 
@@ -32,6 +33,7 @@ tween = Timer.to(1,inst,{"x":20})
 #your update loop 
 timer.update(dt)
 ```
+This will move the box from 0 to 20 in the x direction in 1 second.
 #Advanced(Untested):
 You can use a list as your var/item see:
 ```python
@@ -45,7 +47,7 @@ inst.x = 0
 inst.y = 0 
 tween = Timer.to(1,inst,{"x":100,"y":100).after(1,{"color":[255,255,255]})
 ```
-This will move the inst instanceo of box, x value from 0 to 20 in 1 second. 
+This will move the box to [100,100] in 1 second and after set its color from [0,0,0] to [255,255,255]
 
 You can have as many vars as you want but they must be int.
 
