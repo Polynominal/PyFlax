@@ -33,7 +33,7 @@ tween = Timer.to(1,inst,{"x":20})
 timer.update(dt)
 ```
 #Advanced(Untested):
-You can use a lists as your var/item see:
+You can use a list as your var/item see:
 ```python
 inst.color = [0,0,0]
 tween = Timer.to(1,inst,{"color":[255,255,255]})
@@ -51,5 +51,6 @@ You can have as many vars as you want but they must be int.
 
 ##Planned features:
   stop a tween sequence.
+  other types of easing, eg elastic and interface for costum methods.
   shortcut for creating single var tweens.
 
