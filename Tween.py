@@ -14,7 +14,7 @@ class single:
          self.rate = time > 0 and 1 / time or 0
          self.start = item
          self.current = item
-         self.diff = findDistance(item,exp)
+         self.diff = exp-item
          self.mode = mode
          self.exp = exp
          self.done = False
@@ -23,17 +23,19 @@ class single:
      def update(self,dt):
          self.progress = self.progress + self.rate * dt
          p = self.progress
-         x = x = p >= 1 and 1 or ease[self.mode](p)
-         self.current = self.start + self.diff*x
+         x = p >= 1 and 1 or ease[self.mode](p)
+         self.current = self.start + x*self.diff
          if p > 1:
              self.done = True
 
 
 class _to:
-    def __init__(self,time,obj,var,mode="Linear"):
+    def __init__(self,time,obj,var,mode="Linear",done = None):
         self.tweens = []
         self.var = var
         self.obj = obj
+        self.done = False
+        self.onComplete = done
         #key val
         for i,v in var.items():
             item = single(time,getattr(obj,i),v)
@@ -55,6 +57,11 @@ class _to:
             no = no +1
         for item in items:
              self.var.pop(item, None)
+        if len(self.tweens) == 0:
+            self.done = True
+            if self.onComplete:
+                self.onComplete()
+
         pass
     def stop(self):
         pass
@@ -63,12 +70,15 @@ class Tween():
         self.tweens = []
         pass
     # VAR HAS TO BE DICT WITH STR:EXPVAL
-    def to(self,time,obj,var,mode="Linear"):
-       t = _to(time,obj,var,mode="Linear")
+    def to(self,time,obj,var,mode="Linear",func=None):
+       mode = mode or "linear"
+       t = _to(time,obj,var,mode,func)
        list.insert(self.tweens,len(self.tweens)+1,t)
-       return t
+       return
 
     def update(self,dt):
         for tween in self.tweens:
             tween.update(dt)
+            if tween.done:
+                self.tweens.remove(tween)
         pass
