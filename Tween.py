@@ -123,7 +123,7 @@ class _to:
     def delay(t):
         self.delay = t 
     def stop(self):
-        list.remove(selfparent.tweens,self)
+        list.remove(self.parent.tweens,self)
         pass
 class Tween():
     def __init__(self):
